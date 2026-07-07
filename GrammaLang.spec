@@ -1,35 +1,30 @@
-# -*- mode: python ; coding: utf-8 -*-
-
-import os, glob
-
-block_cipher = None
-
-# DLL от llama-cpp-python
-llama_dir = os.path.dirname(__import__('llama_cpp').__file__)
-llama_lib = os.path.join(llama_dir, 'lib')
-llama_dlls = glob.glob(os.path.join(llama_lib, '*.dll'))
-binaries = [(dll, 'llama_cpp/lib') for dll in llama_dlls]
+﻿# -*- mode: python ; coding: utf-8 -*-
 
 a = Analysis(
     ['gui_app.py'],
-    pathex=['C:\\Projects\\local-ai-one-button', 'C:\\Users\\Валерий\\Desktop\\Grammalang\\hybrid'],
-    binaries=binaries,
+    pathex=['.'],
+    binaries=[],
     datas=[
         ('prompts/', 'prompts/'),
-        ('configs/', 'configs/'),
         ('src/', 'src/'),
     ],
     hiddenimports=[
-        'llama_cpp',
-        'llama_cpp.llama_cpp',
+        'src',
         'src.fast_parser',
         'src.deep_interpreter',
         'src.fusion',
-        'local_model',
+        'src.cardiogram',
+        'llama_cpp',
+        'llama_cpp.llama_cpp',
         'pydantic',
+        'matplotlib',
+        'matplotlib.backends.backend_tkagg',
+        'numpy',
         'json',
         'requests',
         're',
+        'threading',
+        'pathlib',
     ],
     hookspath=[],
     hooksconfig={},
@@ -38,13 +33,12 @@ a = Analysis(
     noarchive=False,
 )
 
-pyz = PYZ(a.pure, a.zipped_data, cipher=block_cipher)
+pyz = PYZ(a.pure)
 
 exe = EXE(
     pyz,
     a.scripts,
     a.binaries,
-    a.zipfiles,
     a.datas,
     [],
     name='GrammaLang',
@@ -54,10 +48,11 @@ exe = EXE(
     upx=True,
     upx_exclude=[],
     runtime_tmpdir=None,
-    console=False,
+    console=True,
     disable_windowed_traceback=False,
     argv_emulation=False,
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
+    icon=None,
 )
